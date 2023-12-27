@@ -5,6 +5,7 @@ import sql_functions as sq
 import svm
 import NN11_test as nn
 from datetime import datetime
+from llm7 import chat_with_gpt
 
 app = Flask(__name__)
 app.secret_key = 'your_very_secret_key_here'  # added
@@ -147,10 +148,15 @@ def calculate_sum():
              future_str=future_str+'Nothing'
         else:
             for k in problems:
-                future_str=future_str+k+'\n' 
-        
+                future_str=future_str+k+'\n'
+            text2=chat_with_gpt(*problems)
+            removing1="I'm not a doctor. but I can provide some general information."
+            text2=text2.replace(removing1, "")
+
+            
+
+    
      
-        
      # text making    
             
     if current1 == 1: # he has heart dieases
@@ -159,20 +165,25 @@ def calculate_sum():
             'Sex:'+sex_1+ '\n'+ \
             'today is'+testtime + '\n'+\
       'According to our estimation,\n' + \
-           person_1  + '  has a heart diesease currently. \n'+ \
+           'You  have a heart diesease currently. \n'+ \
            ' \n'+ \
-           future_str +  ' \n' 
+           future_str +  ' \n' + \
+           'Powered by OpenAI-ChatGPT3.5: ' + text2
+            
+        
 
     if current1 == 0: # he has no heart dieases
         if future1 == 0:
             text1='Name:'+name+ '\n' \
                   'Age:' + str(age) + '\n'\
                   'Sex:'+sex_1+ '\n'+ \
-                  'today is' +testtime + '\n'+\
+                  'today is ' +testtime + '\n'+\
             'According to our estimation,\n' + \
-            person_1 +'  may not have a heart disease. \n' +\
+            'You  may not have a heart disease. \n' +\
             'It is not likely that you have the onset of heart disease 1 year later \n'+ \
-            future_str +  ' \n' 
+            future_str +  ' \n' + \
+            'Powered by OpenAI-ChatGPT3.5: ' + text2
+            
             
                 
         else: # now okay, but later expected ill
@@ -181,10 +192,11 @@ def calculate_sum():
                   'Sex:'+sex_1+ '\n'+ \
                   'today is '+testtime + '\n'+\
             'According to our estimation,\n' + \
-            person_1 +'  may not have a heart disease. cuurently\n ' + \
+            'You  may not have a heart disease. cuurently\n ' + \
             'But, it is probable that he may have the onset of heart diease next year.\n'+ \
             '\n'+ \
-            future_str  + ' \n'    
+            future_str  + ' \n' +\
+            'Powered by OpenAI-ChatGPT3.5: ' + text2
         
         
     
@@ -197,3 +209,4 @@ def calculate_sum():
 
 if __name__ == '__main__':
     app.run(debug=True)
+    #app.run(host='0.0.0.0', port='5000', debug=True) 
